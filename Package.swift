@@ -18,6 +18,12 @@ let package = Package(
 )
 
 package.dependencies = [
-    .package(url: "https://github.com/pointfreeco/swift-sharing", from: "2.8.0"),
+    // Points at the proposed fix on the fork branch to demonstrate the suite
+    // passing. `main` of this repo uses the released swift-sharing 2.8.0, which
+    // reproduces the bug.
+    .package(
+        url: "https://github.com/mAu888/swift-sharing.git",
+        branch: "fix/filestoragekey-immediate-scheduler-dropped-writes"
+    ),
     .package(url: "https://github.com/pointfreeco/swift-dependencies", from: "1.10.0"),
 ]

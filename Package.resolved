@@ -1,5 +1,5 @@
 {
-  "originHash" : "b566528b1ddc15b6d90f29bfb59569eb8e379ce25726fdf91361ab732e905d60",
+  "originHash" : "7b41e3e7bb20a77e2a0fa96e7a6975fafd8edeeccf37acfb9aad373302b2136d",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -76,10 +76,10 @@
     {
       "identity" : "swift-sharing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-sharing",
+      "location" : "https://github.com/mAu888/swift-sharing.git",
       "state" : {
-        "revision" : "bc27f8322bc30f6ce7d864d137dc77a6de8b57eb",
-        "version" : "2.8.0"
+        "branch" : "fix/filestoragekey-immediate-scheduler-dropped-writes",
+        "revision" : "b0ac8081b841704d78e0be5f95c8fffcd209eaa4"
       }
     },
     {
