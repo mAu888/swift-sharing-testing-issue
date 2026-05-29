@@ -1,5 +1,5 @@
 {
-  "originHash" : "7b41e3e7bb20a77e2a0fa96e7a6975fafd8edeeccf37acfb9aad373302b2136d",
+  "originHash" : "db94bc67e7c1aff68bad99ca0b9f7ab298573aa5fa81a5cd8ed6be20f0dd5029",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -78,7 +78,6 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mAu888/swift-sharing.git",
       "state" : {
-        "branch" : "fix/filestoragekey-immediate-scheduler-dropped-writes",
         "revision" : "b0ac8081b841704d78e0be5f95c8fffcd209eaa4"
       }
     },
