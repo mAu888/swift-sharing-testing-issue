@@ -1,0 +1,68 @@
+name: Tests
+
+# Runs the repro suite many times on every push. The bug is a timing-dependent
+# flake, so a single `swift test` is not a reliable signal — the suite is run in
+# a loop and the job fails if *any* iteration reproduces it.
+#
+#   - On `main` (depends on the released swift-sharing) the job is expected to go
+#     RED: it reproduces the dropped-write bug.
+#   - On `with-fix` (depends on the patched fork branch) the job is expected to
+#     stay GREEN: every iteration passes.
+#
+# FileStorageKey only exists on Apple platforms, so this must run on macOS.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      iterations:
+        description: "How many times to run `swift test`"
+        default: "200"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: swift test (loop)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Versions
+        run: |
+          swift --version
+          sw_vers
+
+      - name: Run the suite repeatedly to surface the @Shared isolation flake
+        env:
+          ITERATIONS: ${{ github.event.inputs.iterations || '200' }}
+        run: |
+          set -uo pipefail
+          # Build once so per-iteration time reflects test execution, not compilation.
+          swift build --build-tests
+          fails=0
+          for i in $(seq 1 "$ITERATIONS"); do
+            if swift test > "run-$i.log" 2>&1; then
+              :
+            else
+              fails=$((fails + 1))
+              echo "::group::run $i reproduced the bug"
+              grep -E "✘|Expectation failed|recorded an issue" "run-$i.log" | head -5 || true
+              echo "::endgroup::"
+            fi
+          done
+          echo "--------------------------------------------------------"
+          echo "$fails / $ITERATIONS runs reproduced the dropped-write bug"
+          echo "--------------------------------------------------------"
+          if [ "$fails" -gt 0 ]; then
+            echo "::error::Reproduced the @Shared isolation flake in $fails/$ITERATIONS runs"
+            exit 1
+          fi
