@@ -9,9 +9,7 @@ let package = Package(
             name: "SharedIsolationReproTests",
             dependencies: [
                 .product(name: "Sharing", package: "swift-sharing"),
-                .product(name: "Dependencies", package: "swift-dependencies"),
                 .product(name: "DependenciesTestSupport", package: "swift-dependencies"),
-                .product(name: "DependenciesMacros", package: "swift-dependencies"),
             ]
         )
     ]
