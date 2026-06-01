@@ -6,7 +6,8 @@ which is the default in tests. The in-memory value looks correct, but nothing
 after the first write is persisted, so any reload (or a freshly created `@Shared`
 reading the same file) sees stale data.
 
-Reproduced on **swift-sharing 2.8.0**.
+Reproduced on **swift-sharing 2.8.0** and current **`main`** — the latest
+development changes don't fix it.
 
 ## Reproduce
 
@@ -37,6 +38,16 @@ It is **deterministic** — it fails on every run:
 ```
 Expectation failed: (items → [1]) == [1, 2]
 ```
+
+## Branches
+
+The same test runs against three dependencies (see CI):
+
+| Branch | swift-sharing dependency | Result |
+|---|---|---|
+| [`main`](../../tree/main) | released `2.8.0` | ❌ red — reproduces the bug |
+| [`against-main`](../../tree/against-main) | pointfreeco `main` (latest) | ❌ red — still unfixed upstream |
+| [`with-fix`](../../tree/with-fix) | the [proposed fix](https://github.com/pointfreeco/swift-sharing/pull/213) | ✅ green |
 
 ## Root cause
 
