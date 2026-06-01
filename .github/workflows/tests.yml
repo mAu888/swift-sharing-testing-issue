@@ -31,5 +31,10 @@ jobs:
       - name: Versions
         run: swift --version
 
+      # Resolve swift-sharing's `main` to its current HEAD so each run tests the
+      # latest development changes (not a stale pin).
+      - name: Update to latest swift-sharing main
+        run: swift package update swift-sharing
+
       - name: Run tests
         run: swift test
